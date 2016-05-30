@@ -1,0 +1,36 @@
+﻿# maven ignore
+target/
+catalina.*/
+# ignore classes/
+classes/
+
+# eclipse ignore
+.settings/
+bin/
+.project
+.classpath
+.mymetadata
+
+# idea ignore
+*.iml
+.idea/
+*.ipr
+*.iws
+
+# temp ignore
+*.log
+*.cache
+*.diff
+*.patch
+*.tmp
+
+# system ignore
+.DS_Store
+Thumbs.db
+
+# package ignore (optional)
+# *.jar
+# *.war
+# *.zip
+# *.tar
+# *.tar.gz
