@@ -21,9 +21,9 @@ public class StopWordsTools {
     public static int maxMatchType = 2;
 
     public static void main(String args[]) {
-        String test = "妈逼你妈的发论功";
+        String test = "肏你妈的";
         StopWordsTools stopWordsTools = new StopWordsTools();
-        Set<String> s = stopWordsTools.getStopWords(test, maxMatchType);
+        Set<String> s = stopWordsTools.getStopWords(test, minMatchTYpe);
         System.out.print(s);
         boolean i = stopWordsTools.containStopWord(test, minMatchTYpe);
         System.out.print(i);
@@ -127,9 +127,11 @@ public class StopWordsTools {
                 break;
             }
         }
-
+        if(flag){
+            return matchFlag;
+        }
         // 长度必须大于等于1，为词
-        if (matchFlag < 2 || !flag) {
+        if (matchFlag < 2 ) {
             matchFlag = 0;
         }
         return matchFlag;
