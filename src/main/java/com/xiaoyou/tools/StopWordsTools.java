@@ -21,7 +21,7 @@ public class StopWordsTools {
     public static int maxMatchType = 2;
 
     public static void main(String args[]) {
-        String test = "肏";
+        String test = "警察殴打";
         StopWordsTools stopWordsTools = new StopWordsTools();
         Set<String> s = stopWordsTools.getStopWords(test, maxMatchType);
         System.out.print(s);
@@ -135,7 +135,9 @@ public class StopWordsTools {
 
         if (flag) {
             return matchFlag;
-        } else {
+        }
+        //未匹配LAST应该清空标志位
+        else {
             matchFlag = 0;
         }
         // 长度必须大于等于1，为词
