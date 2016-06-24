@@ -21,7 +21,7 @@ public class StopWordsTools {
     public static int maxMatchType = 2;
 
     public static void main(String args[]) {
-        String test = "肏你妈的";
+        String test = "你怎么看待英国在期末考试包过期间脱欧";
         StopWordsTools stopWordsTools = new StopWordsTools();
         Set<String> s = stopWordsTools.getStopWords(test, minMatchTYpe);
         System.out.print(s);
@@ -120,18 +120,20 @@ public class StopWordsTools {
                         break;
                     }
                 }
+            } else if (matchFlag != 0) {
+                matchFlag = 0;
+                break;
             }
-
             // 不存在，直接返回
             else {
                 break;
             }
         }
-        if(flag){
+        if (flag) {
             return matchFlag;
         }
         // 长度必须大于等于1，为词
-        if (matchFlag < 2 ) {
+        if (matchFlag < 2) {
             matchFlag = 0;
         }
         return matchFlag;
