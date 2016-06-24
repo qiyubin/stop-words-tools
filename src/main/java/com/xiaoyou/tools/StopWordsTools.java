@@ -21,9 +21,9 @@ public class StopWordsTools {
     public static int maxMatchType = 2;
 
     public static void main(String args[]) {
-        String test = "你怎么看待英国在期末考试包过期间脱欧";
+        String test = "肏";
         StopWordsTools stopWordsTools = new StopWordsTools();
-        Set<String> s = stopWordsTools.getStopWords(test, minMatchTYpe);
+        Set<String> s = stopWordsTools.getStopWords(test, maxMatchType);
         System.out.print(s);
         boolean i = stopWordsTools.containStopWord(test, minMatchTYpe);
         System.out.print(i);
@@ -119,6 +119,8 @@ public class StopWordsTools {
                     if (minMatchTYpe == matchType) {
                         break;
                     }
+                } else {
+
                 }
             } else if (matchFlag != 0) {
                 matchFlag = 0;
@@ -129,8 +131,12 @@ public class StopWordsTools {
                 break;
             }
         }
+
+
         if (flag) {
             return matchFlag;
+        } else {
+            matchFlag = 0;
         }
         // 长度必须大于等于1，为词
         if (matchFlag < 2) {
