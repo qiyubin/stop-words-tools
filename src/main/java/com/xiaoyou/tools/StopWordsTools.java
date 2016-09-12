@@ -21,18 +21,18 @@ public class StopWordsTools {
         nickName, feedContent
     }
 
+    public enum MatchType {
+        minMatchType // 最小匹配规则,匹配后停止寻找,abc 如ab、abc都为屏蔽词 找到ab停止
+        , maxMatchType// 最大匹配规则，匹配后继续寻找,abc 如ab、abc都为屏蔽词 找到ab、继续寻找，可以找到屏蔽词abc
+    }
 
-    // 最小匹配规则,匹配后停止寻找,abc 如ab、abc都为屏蔽词 找到ab停止
-    public static int minMatchTYpe = 1;
-    // 最大匹配规则，匹配后继续寻找,abc 如ab、abc都为屏蔽词 找到ab、继续寻找，可以找到屏蔽词abc
-    public static int maxMatchType = 2;
 
     public static void main(String args[]) {
-        String test = "警察殴打";
+        String test = "警察殴";
         StopWordsTools stopWordsTools = new StopWordsTools();
-        Set<String> s = stopWordsTools.getStopWords(test, maxMatchType, ForbiddenType.feedContent);
+        Set<String> s = stopWordsTools.getStopWords(test, MatchType.maxMatchType, ForbiddenType.feedContent);
         System.out.print(s);
-        boolean i = stopWordsTools.containStopWord(test, minMatchTYpe, ForbiddenType.feedContent);
+        boolean i = stopWordsTools.containStopWord(test, MatchType.minMatchType, ForbiddenType.feedContent);
         System.out.print(i);
     }
 
@@ -43,7 +43,7 @@ public class StopWordsTools {
      * @param matchType
      * @return
      */
-    public static Set<String> getStopWords(String txt, int matchType, ForbiddenType forbiddenType) {
+    public static Set<String> getStopWords(String txt, MatchType matchType, ForbiddenType forbiddenType) {
         Set<String> stopWordList = new LinkedHashSet<String>();
 
         for (int i = 0; i < txt.length(); i++) {
@@ -71,7 +71,7 @@ public class StopWordsTools {
      * @param matchType
      * @return
      */
-    public static boolean containStopWord(String txt, int matchType, ForbiddenType forbiddenType) {
+    public static boolean containStopWord(String txt, MatchType matchType, ForbiddenType forbiddenType) {
         boolean flag = false;
         for (int i = 0; i < txt.length(); i++) {
 
@@ -106,7 +106,7 @@ public class StopWordsTools {
      * @param matchType
      * @return
      */
-    private static int checkStopWord(String txt, int beginIndex, int matchType, ForbiddenType forbiddenType) {
+    private static int checkStopWord(String txt, int beginIndex, MatchType matchType, ForbiddenType forbiddenType) {
 
         // 敏感词结束标识位：用于敏感词只有1位的情况
         boolean flag = false;
@@ -133,7 +133,7 @@ public class StopWordsTools {
                     flag = true;
 
                     // 最小规则，直接返回,最大规则还需继续查找
-                    if (minMatchTYpe == matchType) {
+                    if (matchType.equals(MatchType.minMatchType)) {
                         break;
                     }
                 } else {
