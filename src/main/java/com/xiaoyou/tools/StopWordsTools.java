@@ -12,7 +12,14 @@ public class StopWordsTools {
     // 字符编码
     private static String ENCODING = "UTF-8";
     private static String fileName = "stopWord.txt";
-    private static Map stopWordMap = initStopWord();
+    private static String nickNameFile = "nickNameStopWord.txt";
+    private static Map feedContentStopWordMap = initStopWord(fileName);
+    private static Map nickNameStopWordMap = initStopWord(nickNameFile);
+
+
+    public enum ForbiddenType {
+        nickName, feedContent
+    }
 
 
     // 最小匹配规则,匹配后停止寻找,abc 如ab、abc都为屏蔽词 找到ab停止
@@ -23,9 +30,9 @@ public class StopWordsTools {
     public static void main(String args[]) {
         String test = "警察殴打";
         StopWordsTools stopWordsTools = new StopWordsTools();
-        Set<String> s = stopWordsTools.getStopWords(test, maxMatchType);
+        Set<String> s = stopWordsTools.getStopWords(test, maxMatchType, ForbiddenType.feedContent);
         System.out.print(s);
-        boolean i = stopWordsTools.containStopWord(test, minMatchTYpe);
+        boolean i = stopWordsTools.containStopWord(test, minMatchTYpe, ForbiddenType.feedContent);
         System.out.print(i);
     }
 
@@ -36,13 +43,13 @@ public class StopWordsTools {
      * @param matchType
      * @return
      */
-    public static Set<String> getStopWords(String txt, int matchType) {
+    public static Set<String> getStopWords(String txt, int matchType, ForbiddenType forbiddenType) {
         Set<String> stopWordList = new LinkedHashSet<String>();
 
         for (int i = 0; i < txt.length(); i++) {
 
             // 判断是否包含敏感字符
-            int length = checkStopWord(txt, i, matchType);
+            int length = checkStopWord(txt, i, matchType, forbiddenType);
 
             // 存在,加入list中
             if (length > 0) {
@@ -64,12 +71,12 @@ public class StopWordsTools {
      * @param matchType
      * @return
      */
-    public static boolean containStopWord(String txt, int matchType) {
+    public static boolean containStopWord(String txt, int matchType, ForbiddenType forbiddenType) {
         boolean flag = false;
         for (int i = 0; i < txt.length(); i++) {
 
             // 判断是否包含敏感字符
-            int matchFlag = checkStopWord(txt, i, matchType);
+            int matchFlag = checkStopWord(txt, i, matchType, forbiddenType);
 
             // 大于0存在，返回true
             if (matchFlag > 0) {
@@ -79,6 +86,16 @@ public class StopWordsTools {
         return flag;
     }
 
+    private static Map getForbiddenMap(ForbiddenType forbiddenType) {
+        switch (forbiddenType) {
+            case feedContent:
+                return feedContentStopWordMap;
+            case nickName:
+                return nickNameStopWordMap;
+            default:
+                return null;
+        }
+    }
 
     /**
      * 检查文字中是否包含敏感字符，检查规则如下：<br>
@@ -89,14 +106,14 @@ public class StopWordsTools {
      * @param matchType
      * @return
      */
-    private static int checkStopWord(String txt, int beginIndex, int matchType) {
+    private static int checkStopWord(String txt, int beginIndex, int matchType, ForbiddenType forbiddenType) {
 
         // 敏感词结束标识位：用于敏感词只有1位的情况
         boolean flag = false;
 
         // 匹配标识数默认为0
         int matchFlag = 0;
-        Map nowMap = stopWordMap;
+        Map nowMap = getForbiddenMap(forbiddenType);
         for (int i = beginIndex; i < txt.length(); i++) {
             char word = txt.charAt(i);
 
@@ -154,10 +171,10 @@ public class StopWordsTools {
      *
      * @return
      */
-    private static Map initStopWord() {
+    private static Map initStopWord(String fileName) {
 
         // 读取敏感词库
-        Set<String> wordSet = readStopWordFile();
+        Set<String> wordSet = readStopWordFile(fileName);
 
         // 将敏感词库加入到HashMap中
         return addStopWordToHashMap(wordSet);
@@ -219,7 +236,7 @@ public class StopWordsTools {
      * @return
      * @throws Exception
      */
-    private static Set<String> readStopWordFile() {
+    private static Set<String> readStopWordFile(String fileName) {
 
         Set<String> wordSet = null;
 
